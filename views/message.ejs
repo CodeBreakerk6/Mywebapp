@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send Message</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fafafa; /* Light gray background */
+      color: #333; /* Dark gray text */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      width: 400px;
+      padding: 20px;
+      background-color: #fff; /* White background */
+      box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Light shadow */
+      border-radius: 8px;
+    }
+    h1 {
+      color: #405DE6; /* Instagram blue */
+      text-align: center;
+    }
+    form {
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #666; /* Gray text */
+    }
+    input[type="hidden"],
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd; /* Light gray border */
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    textarea {
+      height: 150px; /* Adjust as needed */
+    }
+    button[type="submit"] {
+      background-color: #405DE6; /* Instagram blue */
+      color: #fff; /* White text */
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+    button[type="submit"]:hover {
+      background-color: #35469C; /* Darker blue on hover */
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #405DE6; /* Instagram blue */
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Send a Message</h1>
+    <form action="/message" method="post">
+      <input type="hidden" name="sender_id" value="<%= userId %>">
+      <label for="receiver_id">To:</label>
+      <select id="receiver_id" name="receiver_id">
+        <% users.forEach(user => { %>
+          <option value="<%= user.id %>"><%= user.username %></option>
+        <% }) %>
+      </select>
+      <label for="content">Message:</label>
+      <textarea id="content" name="content" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+    <a href="/messages?user_id=<%= userId %>">View Messages</a>
+  </div>
+</body>
+</html>

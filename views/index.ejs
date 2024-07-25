@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Home</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C);
+    }
+    .container {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.9); /* White with transparency */
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 400px;
+      width: 90%;
+      transition: transform 0.3s ease;
+    }
+    .container:hover {
+      transform: scale(1.02);
+    }
+    h1 {
+      color: #405DE6;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+    a {
+      display: block;
+      background-color: #405DE6;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.2rem;
+      padding: 15px 20px;
+      margin: 15px 0;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    a:hover {
+      background-color: #35469C;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to My Web App</h1>
+    <a href="/register">Register</a>
+    <a href="/login">Login</a>
+  </div>
+</body>
+</html>

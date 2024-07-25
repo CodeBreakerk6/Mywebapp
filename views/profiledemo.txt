@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome, <%= user.username %></h1>
+    <p>Profile Photo:</p>
+    <% if (user.photo) { %>
+      <img src="/uploads/<%= user.photo %>" alt="Profile Photo" width="200">
+    <% } else { %>
+      <p>No photo uploaded</p>
+    <% } %>
+    
+    <% if (isOwner) { %>
+      <h2>Upload a New Photo</h2>
+      <form action="/uploadPhoto" method="post" enctype="multipart/form-data">
+        <input type="file" name="photo" required>
+        <input type="hidden" name="userId" value="<%= user.id %>">
+        <button type="submit">Upload Photo</button>
+      </form>
+    <% } %>
+    
+    <h2>Search for Other Users</h2>
+    <form action="/search" method="get">
+      <input type="text" name="username" placeholder="Enter username" required>
+      <button type="submit">Search</button>
+    </form>
+
+    <!-- Link to view received messages -->
+    <h2>Messages</h2>
+    <a href="/messages?user_id=<%= user.id %>">View Messages</a>
+
+    <!-- Form to send a message -->
+    <h2>Send a Message</h2>
+    <form action="/message" method="get">
+      <input type="hidden" name="user_id" value="<%= user.id %>">
+      <button type="submit">Send Message</button>
+    </form>
+
+
+    <a href="/">Home</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messaging Center</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      background-size: 400% 400%;
+      animation: gradientBackground 15s ease infinite;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 150vh;
+    }
+    @keyframes gradientBackground {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+    }
+    .message-form, .message-list-container {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .message-form h1, .message-list-container h2 {
+      color: #f093fb;
+    }
+    form {
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #ccc;
+    }
+    input[type="hidden"],
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    textarea {
+      height: 100px;
+    }
+    button[type="submit"] {
+      background: linear-gradient(45deg, #f093fb, #f5576c);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+      width: 100%;
+    }
+    button[type="submit"]:hover {
+      background: linear-gradient(45deg, #f5576c, #f093fb);
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #f093fb;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .message-list-container {
+      height: 500px;
+      overflow-y: scroll;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      color: #333;
+    }
+    li:last-child {
+      border-bottom: none;
+    }
+    strong {
+      color: #405DE6;
+      display: block;
+      margin-bottom: 5px;
+    }
+    em {
+      color: #888;
+      font-size: 0.9em;
+      display: block;
+      margin-top: 5px;
+    }
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+      button, a {
+        width: 100%;
+        text-align: center;
+      }
+      input[type="text"], textarea, select {
+        width: 100%;
+      }
+    }
+  </style>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const socket = io();
+
+      // Join room
+      const userId = '<%= userId %>';
+      socket.emit('join_room', userId);
+
+      // Listen for new messages
+      socket.on('new_message', (data) => {
+        const messageList = document.getElementById('messageList');
+        const newMessage = document.createElement('li');
+        newMessage.innerHTML = `<strong>${data.sender}:</strong> ${data.content} <em>${data.timestamp}</em>`;
+        messageList.prepend(newMessage);
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="message-form">
+      <h1>Let's Chat!</h1>
+      <form action="/message" method="POST">
+        <input type="hidden" name="sender_id" value="<%= userId %>">
+        <label for="receiver">Select a user to message:</label>
+        <select name="receiver_id" id="receiver">
+          <% users.forEach(user => { %>
+            <option value="<%= user.id %>" <%= (selectedUserId == user.id) ? 'selected' : '' %>><%= user.username %></option>
+          <% }) %>
+        </select>
+        <label for="content">Message:</label>
+        <textarea name="content" id="content" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+    <div class="message-list-container">
+      <h2>Messages</h2>
+      <ul id="messageList">
+        <% messages.forEach(message => { %>
+          <li><strong><%= message.sender %>:</strong> <%= message.content %> <em><%= message.timestamp %></em></li>
+        <% }) %>
+      </ul>
+    </div>
+    <a href="/profile/<%= userId %>">Back to Profile</a>
+  </div>
+</body>
+</html>

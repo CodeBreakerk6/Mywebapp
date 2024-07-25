@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messaging Center</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fafafa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+    }
+    .message-form, .message-list-container {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .message-form h1, .message-list-container h2 {
+      color: #405DE6;
+    }
+    form {
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #666;
+    }
+    input[type="hidden"],
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    textarea {
+      height: 100px;
+    }
+    button[type="submit"] {
+      background-color: #405DE6;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+    button[type="submit"]:hover {
+      background-color: #35469C;
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #405DE6;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .message-list-container {
+      height: 500px;
+      overflow-y: scroll;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    li:last-child {
+      border-bottom: none;
+    }
+    strong {
+      color: #405DE6;
+    }
+    em {
+      color: #888;
+    }
+  </style>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const socket = io();
+
+      // Join room
+      const userId = '<%= userId %>';
+      socket.emit('join_room', userId);
+
+      // Listen for new messages
+      socket.on('new_message', (data) => {
+        const messageList = document.getElementById('messageList');
+        const newMessage = document.createElement('li');
+        newMessage.innerHTML = `<strong>${data.sender}:</strong> ${data.content} <em>${data.timestamp}</em>`;
+        messageList.prepend(newMessage);
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="message-form">
+      <h1>Message Center</h1>
+      <form action="/message" method="POST">
+        <input type="hidden" name="sender_id" value="<%= userId %>">
+        <label for="receiver">Select a user to message:</label>
+        <select name="receiver_id" id="receiver">
+          <% users.forEach(user => { %>
+            <option value="<%= user.id %>"><%= user.username %></option>
+          <% }) %>
+        </select>
+        <label for="content">Message:</label>
+        <textarea name="content" id="content" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+    <div class="message-list-container">
+      <h2>Messages</h2>
+      <ul id="messageList">
+        <% messages.forEach(message => { %>
+          <li><strong><%= message.sender %>:</strong> <%= message.content %> <em><%= message.timestamp %></em></li>
+        <% }) %>
+      </ul>
+    </div>
+    <a href="/profile/<%= userId %>">Back to Profile</a>
+  </div>
+</body>
+</html>

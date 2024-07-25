@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>AGENT: <%= user.username %></h1>
+    <p>Profile Photo:</p>
+    <% if (user.photo) { %>
+      <img src="/uploads/<%= user.photo %>" alt="Profile Photo" class="profile-photo">
+    <% } else { %>
+      <p>No photo uploaded</p>
+    <% } %>
+
+    <% if (isOwner) { %>
+      <h2>Upload a New Photo</h2>
+      <form action="/uploadPhoto" method="post" enctype="multipart/form-data">
+        <input type="file" name="photo" required>
+        <input type="hidden" name="userId" value="<%= user.id %>">
+        <button type="submit">Upload Photo</button>
+      </form>
+    <% } %>
+
+    <h2>Description/Bio</h2>
+    <% if (user.bio) { %>
+      <p><%= user.bio %></p>
+    <% } else { %>
+      <p>No bio provided</p>
+    <% } %>
+
+    <% if (isOwner) { %>
+      <form action="/updateBio" method="post">
+        <textarea name="bio" placeholder="Enter your bio" required><%= user.bio %></textarea>
+        <input type="hidden" name="userId" value="<%= user.id %>">
+        <button type="submit">Update Bio</button>
+      </form>
+    <% } %>
+
+    <h2>Search for Other Users</h2>
+    <form action="/search" method="get">
+      <input type="text" name="username" placeholder="Enter username" required>
+      <button type="submit">Search</button>
+    </form>
+
+    <!-- Link to the messaging center -->
+    <h2>Messages</h2>
+    <a href="/message_center?user_id=<%= user.id %>">Let's Chat!</a>
+
+    <a href="/">Home</a>
+  </div>
+</body>
+</html>

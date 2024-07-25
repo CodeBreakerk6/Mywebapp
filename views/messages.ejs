@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Messages</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fafafa; /* Light gray background */
+      color: #333; /* Dark gray text */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      width: 600px;
+      padding: 20px;
+      background-color: #fff; /* White background */
+      box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Light shadow */
+      border-radius: 8px;
+    }
+    h1 {
+      color: #405DE6; /* Instagram blue */
+      text-align: center;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      border-bottom: 1px solid #ddd; /* Light gray border bottom */
+      padding: 10px 0;
+    }
+    li:last-child {
+      border-bottom: none; /* Remove border bottom from last item */
+    }
+    strong {
+      color: #405DE6; /* Instagram blue for sender name */
+    }
+    em {
+      color: #666; /* Gray for timestamp */
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #405DE6; /* Instagram blue */
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Your Messages</h1>
+    <ul>
+      <% messages.forEach(message => { %>
+        <li>
+          <strong><%= message.sender %>:</strong> <%= message.content %> <em>(<%= message.timestamp %>)</em>
+        </li>
+      <% }) %>
+    </ul>
+    <a href="/message?user_id=<%= userId %>">Send New Message</a>
+
+  </div>
+</body>
+</html>
